@@ -13,6 +13,7 @@
 #include"Layer/FullyConnected.h"
 #include"Network.h"
 #include"Data_Utils/cifar10Dataset.h"
+#include"Optimizer/SGD.h"
 
 
 #endif /* MICRO_DNN_H_ */

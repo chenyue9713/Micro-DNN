@@ -63,16 +63,16 @@ int main(){
 								{5,8,1,3}};
 
 //
-//	vector<vector<double>> t2 = {{1,2,3,2},
-//							 	{1,1,7,3},
-//								{5,3,1,2}};
+	vector<vector<double>> t2 = {{1,2,3,2},
+							 	{1,1,7,3},
+								{5,3,1,2}};
 //
 //	vector<vector<double>> t6 = {{7,2,3},
 //								{1,1,7},
 //								{5,3,1},
 //								{5,3,1}};
 //
-//	vector<double> t3 = {1,2,3,4};
+	vector<double> v1 = {1,2,3,4};
 //	vector<double> t4 = {1,2,3};
 //	vector<double> t5 = {5,3,6,1};
 //
@@ -81,6 +81,40 @@ int main(){
 //	Vector v4(t5);
 //
 	Matrix m1(t1);
+
+	Matrix m2 = m1.transpose();
+//
+//	Vector v2 = m1.RowWiseStdev();
+//
+//	Matrix m2 = m1.divideRowWise(v2);
+//
+//	vector<double>* m2_data = m2.Data();
+//
+//	double* v2_data = v2.Data();
+//
+//	for(uint32_t i = 0; i < v2.getSize(); ++i)
+//		cout << setw(3) <<v2_data[i] << " ";
+//	cout << endl;
+//	cout << endl;
+//
+//	for(uint32_t i = 0; i < m2.getRowNum(); ++i){
+//		for(uint32_t j = 0; j < m2.getColNum(); ++j){
+//			cout << setw(3) <<m2_data[i][j] << " ";
+//		}
+//		cout << endl;
+//	}
+
+
+
+//	vector<vector<double>> t3(3, vector<double>(4,0));
+//
+//	for(uint32_t i = 0; i < 3; ++i){
+//		t3.data()[i]= t1[i];
+//	}
+
+
+
+
 //
 //	Matrix m2(t2);
 //
@@ -92,11 +126,11 @@ int main(){
 //
 //
 //
-//	vector<double>* m3_d = m3.Data();
+//	vector<double>* m1_d = m1.Data();
 //
-//	for(uint32_t i = 0; i < m3.getRowNum(); ++i){
-//		for(uint32_t j = 0; j < m3.getColNum(); ++j)
-//			cout << setw(3) <<m3_d[i][j] << " ";
+//	for(uint32_t i = 0; i < m1.getRowNum(); ++i){
+//		for(uint32_t j = 0; j < m1.getColNum(); ++j)
+//			cout << setw(3) <<m1_d[i][j] << " ";
 //		cout << endl;
 //	}
 //
@@ -209,24 +243,78 @@ int main(){
 //
 //	return 0;
 
-	string dir = "/home/yue/eclipse-workspace/Micro-DNN/test_data/CIFAR10/cifar-10-batches-bin";
-
-	ifstream Image1File((dir + "/data_batch_1.bin").c_str(), ios::in|ios::binary);
-	ifstream Image2File((dir + "/data_batch_2.bin").c_str(), ios::in|ios::binary);
-	ifstream Image3File((dir + "/data_batch_3.bin").c_str(), ios::in|ios::binary);
-	ifstream Image4File((dir + "/data_batch_4.bin").c_str(), ios::in|ios::binary);
-	ifstream Image5File((dir + "/data_batch_5.bin").c_str(), ios::in|ios::binary);
-
-	vector<ifstream*> ImageFiles;
-	ImageFiles.push_back(&Image1File);
-	ImageFiles.push_back(&Image2File);
-	ImageFiles.push_back(&Image3File);
-	ImageFiles.push_back(&Image4File);
-	ImageFiles.push_back(&Image5File);
+//	string dir = "/home/yue/eclipse-workspace/Micro-DNN/test_data/CIFAR10/cifar-10-batches-bin";
 //
-	cifar10Dataset cifar(ImageFiles);
+//	ifstream Image1File((dir + "/data_batch_1.bin").c_str(), ios::in|ios::binary);
+//	ifstream Image2File((dir + "/data_batch_2.bin").c_str(), ios::in|ios::binary);
+//	ifstream Image3File((dir + "/data_batch_3.bin").c_str(), ios::in|ios::binary);
+//	ifstream Image4File((dir + "/data_batch_4.bin").c_str(), ios::in|ios::binary);
+//	ifstream Image5File((dir + "/data_batch_5.bin").c_str(), ios::in|ios::binary);
+//
+//	vector<ifstream*> ImageFiles;
+//	ImageFiles.push_back(&Image1File);
+//	ImageFiles.push_back(&Image2File);
+//	ImageFiles.push_back(&Image3File);
+//	ImageFiles.push_back(&Image4File);
+//	ImageFiles.push_back(&Image5File);
+////
+//	cifar10Dataset cifar(ImageFiles);
+//
+//	cifar.preprocess(49000,1000,1000,false);
+//
+//	Network net;
+//
+//	Layer* fc1 = new FullyConnected(3072, 100, "relu");
+//	fc1->init(0.0, 0.001);
+//	//fc1->set_parameters(w1,b1);
+//
+//	Layer* fc2 = new FullyConnected(100, 10, "None");
+//	fc2->init(0.0, 0.001);
+//	//fc2->set_parameters(w2,b2);
+//
+//	Loss* softmax_loss = new SoftmaxCrossEntropy();
+//
+//	net.add_layer(fc1);
+//	net.add_layer(fc2);
+//	net.set_loss(softmax_loss);
+//
+//	SGD opt;
+//	opt.m_lr = 0.001;
+//	opt.m_decay = 0.9995;
+//
+//	net.fit(opt,cifar.getTrainset(), cifar.getTrainLabels(), 200, 9);
 
-	cifar.preprocess(49000,1000,1000);
+//srand(1);
+
+//std::default_random_engine generator;
+//std::uniform_int_distribution<int> distribution(0,25);
+//
+//for(int k = 0; k <2; ++k){
+//
+//for(uint32_t i = 0; i < 5 ; ++i){
+//	for(uint32_t j = 0; j < 5 ; ++j){
+//		cout << distribution(generator) << " ";
+//	}
+//	cout << endl;
+//}
+//cout << endl;
+//}
+//
+//for(uint32_t i = 0; i < 5 ; ++i){
+//	for(uint32_t j = 0; j < 5 ; ++j){
+//		cout << distribution(generator) << " ";
+//	}
+//	cout << endl;
+//}
+
+//	std::default_random_engine generator;
+//	std::uniform_int_distribution<int> distribution(0,5000-1);
+//
+//	shuffle_test(generator, distribution);
+//	shuffle_test(generator, distribution);
+
+
+
 
 
 

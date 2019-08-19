@@ -33,6 +33,7 @@ public:
 	void setData(const vector<vector<double>> & in_data); 
 
 	void resize(const uint32_t row, const uint32_t col);
+	void setsize(const uint32_t row, const uint32_t col);
 
 	const uint32_t getRowNum() const;
 	const uint32_t getColNum() const;
@@ -42,6 +43,7 @@ public:
 	Matrix addRowWise(Vector & in_Vector) const;
 	Matrix substractColWise(const Vector & in_Vector) const;
 	Matrix substractRowWise(const Vector & in_Vector) const;
+	Matrix divideRowWise(const Vector & in_Vector) const;
 
 	const Vector ColWiseMax() const;
 	const Vector RowWiseMax() const;
@@ -50,6 +52,7 @@ public:
 	Vector RowWiseSum() const;
 
 	Vector RowWiseMean() const;
+	Vector RowWiseStdev() const;
 
 	const double sum() const;
 

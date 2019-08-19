@@ -45,11 +45,23 @@ private:
 
 public:
 
-	void preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint32_t NumValSet);
+	void preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint32_t NumValSet, bool stdev);
 
 	cifar10Dataset(vector<ifstream*>& imageFiles);
 
 	~cifar10Dataset();
+
+	Matrix getTrainset() const;
+
+	Vector getTrainLabels() const;
+
+	Matrix getTestset() const;
+
+	Vector getTestLabels() const;
+
+	Matrix getValset() const;
+
+	Vector getValLabels() const;
 
 //	const vector<image> getDataset() const;
 

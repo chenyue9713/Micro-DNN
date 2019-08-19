@@ -14,13 +14,14 @@
 class Optimizer{
 
 public:
+
 	virtual ~Optimizer(){};
 
 	virtual void reset(){};
 
-	virtual void update(Matrix& dw, Matrix& weight);
+	virtual void update(const Matrix& dw, Matrix& weight)=0;
 
-	virtual void update(Vector& db, Vector& bias);
+	virtual void update(const Vector& db, Vector& bias)=0;
 
 };
 
