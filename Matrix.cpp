@@ -60,6 +60,7 @@ void Matrix::resize(const uint32_t row, const uint32_t col){
 
 }
 
+
 const uint32_t Matrix::getRowNum() const{
 	return this->m_row;
 }
@@ -75,22 +76,24 @@ const uint32_t Matrix::getColNum() const{
 
 const Matrix Matrix::transpose() const{
 
-	vector<vector<double>> new_data;
+ 	vector<vector<double>> new_data;
 
-	for (uint32_t i = 0; i < this->m_col; ++i){
-		vector<double> c_vector;
-		for(uint32_t j = 0; j < this->m_row; ++j){
-			c_vector.push_back(this->m_data[j][i]);
-		}
-		new_data.push_back(c_vector);
-	}
+ 	for (uint32_t i = 0; i < this->m_col; ++i){
+ 		vector<double> c_vector;
+ 		for(uint32_t j = 0; j < this->m_row; ++j){
+ 			c_vector.push_back(this->m_data[j][i]);
+ 		}
+ 		new_data.push_back(c_vector);
+ 	}
 
-	Matrix new_matrix(new_data);
+ 	Matrix new_matrix(new_data);
 
-	return new_matrix;
-}
+ 	return new_matrix;
+ }
 
-Matrix Matrix::addColWise(Vector & in_Vector) const{
+
+
+Matrix Matrix:: (Vector & in_Vector) const{
 
 	vector<vector<double>> new_data = this->m_data;
 	vector<double> in_data = in_Vector.getData();
@@ -167,6 +170,26 @@ Matrix Matrix::substractRowWise(const Vector & in_Vector) const{
 	return new_matrix;
 }
 
+Matrix Matrix::divideRowWise(const Vector & in_Vector) const{
+
+	vector<vector<double>> new_data = this->m_data;
+	vector<double> in_data = in_Vector.getData();
+
+	if(in_Vector.getSize() != this->m_col){
+		throw invalid_argument("[Matrix::substractRowWise]: in_Vector size should be same with number of column in Matrix.");
+	}
+
+	for(uint32_t i = 0; i < this-> m_row; ++i){
+		for(uint32_t j = 0; j < this-> m_col; ++j){
+			new_data[i][j] /= in_data[j];
+		}
+	}
+
+	Matrix new_matrix(new_data);
+	return new_matrix;
+}
+
+
 const Vector Matrix::ColWiseMax() const{
 
 	Vector new_Vector(this->m_row);
@@ -231,6 +254,7 @@ Vector Matrix::RowWiseSum() const{
 
 	Vector new_Vector(new_data);
 
+
 	return new_Vector;
 
 }
@@ -254,6 +278,33 @@ Vector Matrix::RowWiseMean() const{
 	return new_Vector;
 
 }
+
+
+Vector Matrix::RowWiseStdev() const{
+
+	vector<double> new_data;
+
+	for(uint32_t i = 0; i < this-> m_col; ++i){
+		double col_sum = 0.0;
+		double var = 0.0;
+		double stdDev = 0.0;
+		for(uint32_t j = 0; j < this-> m_row; ++j){
+			col_sum += this->m_data[j][i];
+		}
+		double col_mean = col_sum / this->m_row;
+		for(uint32_t j = 0; j < this-> m_row; ++j){
+			var += pow(this->m_data[j][i] - col_mean, 2);
+		}
+		var /= this->m_row;
+		stdDev = sqrt(var);
+		new_data.push_back(stdDev);
+	}
+
+	Vector new_Vector(new_data);
+	return new_Vector;
+}
+
+
 
 const double Matrix::sum() const{
 
