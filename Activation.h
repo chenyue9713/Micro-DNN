@@ -8,8 +8,8 @@
 #ifndef ACTIVATION_H_
 #define ACTIVATION_H_
 
-#include"Matrix.h"
 #include"Config.h"
+#include "Matrix.h"
 
 using namespace std;
 
@@ -20,25 +20,21 @@ public:
 	~Activation(){};
 
 	void Relu_forward(Matrix & z, Matrix & out){
-		vector<double>* out_data = out.Data();
-		vector<vector<double>> z_data = z.getData();
-		for(uint32_t i = 0; i < z_data.size(); ++i){
-			for(uint32_t j = 0; j < z_data[0].size(); ++j){
-				out_data[i][j] = max(0.0, double(z_data[i][j]));
-			}
+		double* out_data_pt = out.Data();
+		double* z_data_pt = z.Data();
+		for(uint32_t i = 0; i < z.getRowNum() * z.getColNum(); ++i, ++out_data_pt, ++z_data_pt){
+			*out_data_pt = max(0.0, *z_data_pt);
 		}
 	}
 	void Relu_backward(Matrix & z, Matrix & da){
 		uint32_t row = z.getRowNum();
 		uint32_t col = z.getColNum();
 
-		vector<vector<double>> a_data = z.getData();
-		vector<double>* da_data = da.Data();
-		for (uint32_t i = 0; i < row; ++i){
-			for (uint32_t j = 0; j < col; ++j){
-				if(a_data[i][j] < 0.0){
-					da_data[i][j] = 0;
-				}
+		double* a_data_pt = z.Data();
+		double* da_data_pt = da.Data();
+		for (uint32_t i = 0; i < row * col; ++i){
+			if(*a_data_pt < 0.0){
+				*da_data_pt = 0;
 			}
 		}
 

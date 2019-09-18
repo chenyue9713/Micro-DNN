@@ -9,8 +9,8 @@
 #define LOSS_H_
 
 #include"Config.h"
-#include"Matrix.h"
-#include"Vector.h"
+#include "Matrix.h"
+#include "Vector.h"
 
 
 class Loss{
@@ -19,7 +19,7 @@ public:
 
 	virtual ~Loss(){};
 
-	virtual void evaluate(const Matrix& scores, const Vector& target) = 0;
+	virtual void evaluate(Matrix& scores, Vector& target) = 0;
 
 	virtual const Matrix& get_derivative() const = 0;
 

@@ -8,12 +8,13 @@
 #ifndef NETWORK_H_
 #define NETWORK_H_
 
+#include "Loss.h"
 #include"Config.h"
-#include"Matrix.h"
-#include"Vector.h"
 #include"Layer.h"
-#include"Loss.h"
-#include"random.cpp"
+#include "Matrix.h"
+#include "random.cpp"
+#include "Vector.h"
+#include "Optimizer.h"
 
 using namespace std;
 
@@ -24,10 +25,6 @@ private:
 	vector<Layer*> m_layers;
 	Loss* m_loss;
 
-	//void update(Optimizer& opt)
-	void feedForward(const Matrix& input);
-
-	void backProp(const Matrix& input, Vector& target);
 
 	void update(Optimizer & opt);
 
@@ -47,6 +44,16 @@ public:
 	uint32_t getNumLayers() const;
 
 	void fit(Optimizer& opt, Matrix x, Vector y, uint16_t batch_size, uint16_t epoch);
+
+	//debug
+	const Matrix& get_dw1() const;
+	const Vector& get_db1() const;
+	const Matrix& get_dw2() const;
+	const Vector& get_db2() const;
+
+	void feedForward(Matrix& input);
+
+	void backProp(Matrix& input, Vector& target);
 
 };
 

@@ -30,7 +30,8 @@ cifar10Dataset::cifar10Dataset(vector<ifstream*>& imageFiles){
 
 			vector<double> image_double(image.begin(), image.end());
 
-			this->m_Dataset.push_back(image_double);
+			//this->m_Dataset.push_back(image_double);
+			this->m_Dataset.insert(this->m_Dataset.end(),image_double.begin(), image_double.end());
 			this->m_Labels.push_back(label);
 
 		}
@@ -50,9 +51,16 @@ void cifar10Dataset::preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint3
 
 	this->m_trainset.resize(NumTrainSet,3072);
 	this->m_trainLabels.resize(NumTrainSet);
+
+	double* m_trainset_pt = this->m_trainset.Data();
+	double* m_Dataset_pt = this->m_Dataset.data();
+
+	double* m_trainLabels_pt = this->m_trainLabels.Data();
+	double* m_Labels_pt = this->m_Labels.data();
+
 	for(uint32_t i = 0; i < NumTrainSet; ++i){
-		this->m_trainset.Data()[i] = this->m_Dataset[i];
-		this->m_trainLabels.Data()[i] = this->m_Labels[i];
+		*(m_trainset_pt + i ) = *(m_Dataset_pt + i);
+		*(m_trainLabels_pt + i ) = *(m_Labels_pt + i);
 	}
 
 
@@ -75,9 +83,13 @@ void cifar10Dataset::preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint3
 
 	this->m_valset.resize(NumValSet, 3072);
 	this->m_valLabels.resize(NumValSet);
+
+	double *m_valset_pt = this->m_valset.Data();
+	double *m_valLabels_pt = this->m_valLabels.Data();
+
 	for(uint32_t i = 0; i < NumValSet; ++i){
-		this->m_valset.Data()[i] = this->m_Dataset[NumTrainSet+i];
-		this->m_valLabels.Data()[i] = this->m_Labels[NumTrainSet+i];
+		*(m_valset_pt + i ) = *(m_Dataset_pt + NumTrainSet+i);
+		*(m_valLabels_pt + i ) = *(m_Labels_pt + NumTrainSet+i);
 	}
 
 
@@ -99,9 +111,14 @@ void cifar10Dataset::preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint3
 
 	this->m_testset.resize(NumTestSet, 3072);
 	this->m_testLabels.resize(NumTestSet);
+
+	double *m_testset_pt = this->m_testset.Data();
+	double *m_testLabels_pt = this->m_testLabels.Data();
+
+
 	for(uint32_t i = 0; i < NumTestSet; ++i){
-		this->m_testset.Data()[i] = this->m_Dataset[i];
-		this->m_testLabels.Data()[i] = this->m_Labels[i];
+		*(m_testset_pt + i ) = *(m_Dataset_pt + i);
+		*(m_testLabels_pt + i ) = *(m_Labels_pt + i);
 	}
 
 //	vector<image>::const_iterator first_test = this->m_Dataset.begin();
@@ -119,7 +136,7 @@ void cifar10Dataset::preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint3
 //	testset_labels.resize(0);
 //	testset_labels.shrink_to_fit();
 	// free up memory in m_Dataset and m_Labels.
-	vector<image>().swap(this->m_Dataset);
+	vector<double>().swap(this->m_Dataset);
 	vector<double>().swap(this->m_Labels);
 
 

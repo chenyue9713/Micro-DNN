@@ -5,7 +5,7 @@
  *      Author: yue
  */
 
-#include"Network.h"
+#include "Network.h"
 
 
 void Network::add_layer(Layer* layer){
@@ -24,7 +24,7 @@ uint32_t Network::getNumLayers() const{
 	return this->m_layers.size();
 }
 
-void Network::feedForward(const Matrix& input){
+void Network::feedForward(Matrix& input){
 
 	const int NumLayers = getNumLayers();
 
@@ -44,7 +44,7 @@ void Network::feedForward(const Matrix& input){
 }
 
 
-void Network::backProp(const Matrix& input, Vector& target){
+void Network::backProp(Matrix& input, Vector& target){
 
 	const int NumLayers = getNumLayers();
 
@@ -67,7 +67,7 @@ void Network::backProp(const Matrix& input, Vector& target){
 
 void Network::update(Optimizer & opt){
 
-	const int NumLayers = getNumLayers();
+	const uint32_t NumLayers = getNumLayers();
 
 	if(NumLayers <= 0)
 		return;
@@ -86,6 +86,9 @@ void Network::fit(Optimizer& opt, Matrix x, Vector y, uint16_t batch_size, uint1
 
 	uint32_t numSample = x.getRowNum();
 
+	double* x_pt = x.Data();
+	double* y_pt = y.Data();
+
 
 	if(y.getSize() != numSample){
 		throw invalid_argument("[Network::fit]: X and Y have different number of sample");
@@ -93,17 +96,23 @@ void Network::fit(Optimizer& opt, Matrix x, Vector y, uint16_t batch_size, uint1
 
 	shuffle_batch(batch_size, numSample, batch_mask);
 
+	double* batch_mask_pt = batch_mask.Data();
+
 	double loss;
 	for(uint16_t i = 0; i < epoch; ++i){
 		int count = 0;
-		for(auto batch: batch_mask.getData()){
-			uint16_t bsize = batch[0];
+		for(uint32_t i = 0; i < batch_mask.getRowNum(); ++i){
+			uint16_t bsize = *(batch_mask_pt + i * (batch_mask.getColNum()-1));
 			Matrix batch_x(bsize, 3072);
+			double* batch_x_pt = batch_x.Data();
 			Vector batch_y(bsize);
+			double* batch_y_pt = batch_y.Data();
 			for(uint16_t k = 0; k < bsize; ++k){
-				int index = int(batch[k+1]);
-				batch_x.Data()[k] = x.Data()[index];
-				batch_y.Data()[k] = y.Data()[index];
+				int index = int(*(batch_mask_pt + i * (batch_mask.getColNum()-1) + k+1));
+				*(batch_x_pt + k) = *(x_pt + index);
+				//batch_x.Data()[k] = x.Data()[index];
+				*(batch_y_pt + k) = *(y_pt + index);
+				//batch_y.Data()[k] = y.Data()[index];
 			}
 
 			this->feedForward(batch_x);
@@ -115,10 +124,39 @@ void Network::fit(Optimizer& opt, Matrix x, Vector y, uint16_t batch_size, uint1
 			cout << "(batch number " << count << " / " << 245 << ") " << "loss:" << loss << endl;
 		}
 		cout << "(Epoch " << i << " / " << epoch << ") " << "loss:" << loss << endl;
-
-
 	}
 
+}
+
+const Matrix& Network::get_dw1() const{
+	Layer* first_layer = this->m_layers[0];
+
+	return first_layer->get_dw();
+
+
+}
+
+const Matrix& Network::get_dw2() const{
+
+	Layer* last_layer = this->m_layers[1];
+
+	return last_layer->get_dw();
+
+}
+
+const Vector& Network::get_db1() const{
+
+	Layer* first_layer = this->m_layers[0];
+
+	return first_layer->get_db();
+
+}
+
+
+const Vector& Network::get_db2() const{
+	Layer* last_layer = this->m_layers[1];
+
+	return last_layer->get_db();
 
 }
 

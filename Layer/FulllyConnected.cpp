@@ -27,12 +27,10 @@ void FullyConnected::init(const double mu, const double sigma){
 	default_random_engine generator;
 	normal_distribution<double> distribution(mu,sigma);
 
-	vector<double>* m_weights_data = this->m_weights.Data();
-	for(uint32_t i = 0; i < this->m_in_size; ++i){
-		for(uint32_t j = 0; j < this->m_out_size; ++j){
-			double number = distribution(generator);
-			m_weights_data[i][j] = number;
-		}
+	double* m_weights_data = this->m_weights.Data();
+	for(uint32_t i = 0; i < this->m_in_size * m_out_size; ++i,++m_weights_data){
+		double number = distribution(generator);
+		*m_weights_data = number;
 	}
 
 }
@@ -65,7 +63,8 @@ void FullyConnected::backProp(const Matrix & prev_layer_data, const Matrix & nex
 		act.Relu_backward(this->m_z, dLz);
 	this->m_dw = prev_layer_data.transpose().dotProduct(dLz);
 	this->m_db = dLz.RowWiseSum();
-	this->m_dx = dLz.dotProduct(this->m_weights.transpose());
+	Matrix weight_transpose = this->m_weights.transpose();
+	this->m_dx = dLz.dotProduct(weight_transpose);
 
 }
 
@@ -96,13 +95,21 @@ const Matrix& FullyConnected::get_dx() const{
 	return this->m_dx;
 }
 
+//debug
+const Matrix& FullyConnected::get_dw() const{
+	return this->m_dw;
+}
+const Vector& FullyConnected::get_db() const{
+	return this->m_db;
+}
+
 void FullyConnected::set_parameters(const Matrix& weights, const Vector& bias){
 	this->m_weights = weights;
 	this->m_bias = bias;
 }
 
 void FullyConnected::update(Optimizer& opt){
-	
+
 	opt.update(this->m_dw, this->m_weights);
 	opt.update(this->m_db, this->m_bias);
 

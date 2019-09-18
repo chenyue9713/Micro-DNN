@@ -17,9 +17,8 @@ using namespace std;
 class cifar10Dataset{
 
 private:
-	typedef vector<double> image;
 
-	vector<image> m_Dataset;
+	vector<double> m_Dataset;
 
 	Matrix m_trainset;
 

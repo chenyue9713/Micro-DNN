@@ -8,8 +8,8 @@
 #ifndef OPTIMIZER_H_
 #define OPTIMIZER_H_
 
-#include"Matrix.h"
-#include"Vector.h"
+#include "Matrix.h"
+#include "Vector.h"
 
 class Optimizer{
 
@@ -19,9 +19,9 @@ public:
 
 	virtual void reset(){};
 
-	virtual void update(const Matrix& dw, Matrix& weight)=0;
+	virtual void update(Matrix& dw, Matrix& weight)=0;
 
-	virtual void update(const Vector& db, Vector& bias)=0;
+	virtual void update(Vector& db, Vector& bias)=0;
 
 };
 

@@ -1,7 +1,7 @@
 /*
  * Vector.h
  *
- *  Created on: Aug 6, 2019
+ *  Created on: Aug 20, 2019
  *      Author: yue
  */
 
@@ -9,14 +9,14 @@
 #define VECTOR_H_
 
 #include"Config.h"
-using namespace std;
 
+using namespace std;
 
 class Vector{
 
 private:
-	vector<double> m_data;
 	uint32_t m_size;
+	vector<double> m_data;
 
 public:
 	Vector();
@@ -24,26 +24,28 @@ public:
 	Vector(vector<double>& in_data);
 	~Vector();
 
-	const vector<double> getData() const;
 	double* Data();
 
-	void setData(const vector<double> & in_data);
+	void resize(const uint32_t size);
 
-	void resize(uint32_t size);
+	void setData(vector<double>& in_data);
 
 	const uint32_t getSize() const;
 
-	Vector operator*(const Vector & in_Vector) const;
+	Vector operator*(Vector & in_Vector) const;
 	Vector operator*(const double in_num) const;
-	Vector operator+(const Vector & in_Vector) const;
+	Vector operator+(Vector & in_Vector) const;
 	Vector operator+(const double in_num) const;
-	Vector operator-(const Vector & in_Vector) const;
+	Vector operator-(Vector & in_Vector) const;
 	Vector operator-(const double in_num) const;
 
 
 
-};
 
+
+
+
+};
 
 
 

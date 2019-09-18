@@ -8,10 +8,10 @@
 #ifndef LOSS_SOFTMAXCROSSENTROPY_H_
 #define LOSS_SOFTMAXCROSSENTROPY_H_
 
-#include"../Matrix.h"
-#include"../Vector.h"
 #include"../Config.h"
 #include"../Loss.h"
+#include "../Matrix.h"
+#include "../Vector.h"
 
 
 class SoftmaxCrossEntropy: public Loss{
@@ -23,7 +23,7 @@ private:
 
 public:
 
-	void evaluate(const Matrix& scores, const Vector& target);
+	void evaluate(Matrix& scores, Vector& target);
 
 	const Matrix& get_derivative() const;
 

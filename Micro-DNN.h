@@ -10,7 +10,6 @@
 
 #include"Layer/FullyConnected.h"
 #include"Loss/SoftmaxCrossEntropy.h"
-#include"Layer/FullyConnected.h"
 #include"Network.h"
 #include"Data_Utils/cifar10Dataset.h"
 #include"Optimizer/SGD.h"

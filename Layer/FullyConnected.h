@@ -44,6 +44,12 @@ public:
 
 	const Matrix& get_dx() const;
 
+	//Debug
+	const Matrix& get_dw() const;
+	const Vector& get_db() const;
+
+
+
 
 	// for debug
 	void set_parameters(const Matrix& weights, const Vector& bias);

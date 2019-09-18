@@ -8,17 +8,18 @@
 #include "SoftmaxCrossEntropy.h"
 
 
-void SoftmaxCrossEntropy::evaluate(const Matrix& scores, const Vector& target){
+void SoftmaxCrossEntropy::evaluate(Matrix& scores, Vector& target){
 
-	Matrix shifted_scores = scores.substractColWise(scores.ColWiseMax());
+	Vector scores_ColWiseMax =  scores.ColWiseMax();
+	Matrix shifted_scores = scores.substractColWise(scores_ColWiseMax);
 
 	Matrix shifted_scores_exp =  shifted_scores;
 
-	vector<double>* shifted_scores_exp_data = shifted_scores_exp.Data();
+	double* shifted_scores_exp_data = shifted_scores_exp.Data();
 
 	for(uint32_t i = 0; i < shifted_scores_exp.getRowNum(); ++i){
 		for(uint32_t j = 0; j < shifted_scores_exp.getColNum(); ++j){
-			shifted_scores_exp_data[i][j] = exp(shifted_scores_exp_data[i][j]);
+			*(shifted_scores_exp_data + shifted_scores_exp.getColNum()*i + j) = exp(*(shifted_scores_exp_data + shifted_scores_exp.getColNum()*i + j));
 		}
 	}
 
@@ -31,40 +32,42 @@ void SoftmaxCrossEntropy::evaluate(const Matrix& scores, const Vector& target){
 	
 	Matrix log_probs = shifted_scores.substractColWise(Z);
 
-	vector<vector<double>> probs_data = log_probs.getData();
+	Matrix probs = log_probs;
+
+	double* probs_data = probs.Data();
 
 	for(uint32_t i = 0; i < log_probs.getRowNum(); ++i){
 		for(uint32_t j = 0; j < log_probs.getColNum(); ++j){
-			probs_data[i][j] = exp(probs_data[i][j]);
+			*(probs_data + log_probs.getColNum()*i + j) = exp(*(probs_data + log_probs.getColNum()*i + j));
 		}
 	}
-
-	Matrix probs(probs_data);
 
 	double NumSample = scores.getRowNum();
 
 	this->m_loss = 0;
-	vector<vector<double>> log_probs_data = log_probs.getData();
-	vector<double> target_data = target.getData();
+	double* log_probs_data = log_probs.Data();
+	uint32_t log_probs_data_ColNum = log_probs.getColNum();
+	double* target_data = target.Data();
 
 	for(uint32_t i = 0; i < NumSample; ++i){
-		int index = int(target_data[i]);
-		this->m_loss -= log_probs_data[i][index];
+		int index = int(*(target_data + i));
+		this->m_loss -= *(log_probs_data + log_probs_data_ColNum*i + index);
 	}
 	this->m_loss /= NumSample;
 
 	this->m_dscores = probs;
 
-	vector<double>* m_dscores_data = m_dscores.Data();
+	double* m_dscores_data = m_dscores.Data();
+	uint32_t m_dscores_data_ColNum = m_dscores.getColNum();
 
 	for(uint32_t i = 0; i < NumSample; ++i){
 		int index = int(target_data[i]);
-		m_dscores_data[i][index] -= 1;
+		*(m_dscores_data + m_dscores_data_ColNum*i + index) -= 1;
 	} 	
 
 	for(uint32_t i = 0; i < NumSample; ++i){
 		for(uint32_t j = 0; j < m_dscores.getColNum(); ++j){
-			m_dscores_data[i][j] /= NumSample;
+			*(m_dscores_data + m_dscores.getColNum()*i + j) /= NumSample;
 		}
 	}
 	
