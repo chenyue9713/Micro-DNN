@@ -9,11 +9,11 @@
 #define LAYER_H_
 
 #include"Config.h"
-#include"Matrix.h"
-#include"Vector.h"
 #include"Optimizer.h"
 #include"Activation.h"
 #include<random>
+#include "Matrix.h"
+#include "Vector.h"
 
 class Layer{
 
@@ -52,7 +52,8 @@ public:
 
 	virtual void Test_backward(const Matrix& x, const Matrix& weights, const Vector& bias, const Matrix& dout) = 0;
 
-
+	virtual const Matrix& get_dw() const = 0;
+	virtual const Vector& get_db() const = 0;
 
 };
 
