@@ -59,7 +59,9 @@ void cifar10Dataset::preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint3
 	double* m_Labels_pt = this->m_Labels.data();
 
 	for(uint32_t i = 0; i < NumTrainSet; ++i){
-		*(m_trainset_pt + i ) = *(m_Dataset_pt + i);
+		for(uint32_t j = 0; j < 3072; ++j){
+			*(m_trainset_pt + i*3072 + j) = *(m_Dataset_pt + i*3072 + j);
+		}
 		*(m_trainLabels_pt + i ) = *(m_Labels_pt + i);
 	}
 
@@ -88,7 +90,9 @@ void cifar10Dataset::preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint3
 	double *m_valLabels_pt = this->m_valLabels.Data();
 
 	for(uint32_t i = 0; i < NumValSet; ++i){
-		*(m_valset_pt + i ) = *(m_Dataset_pt + NumTrainSet+i);
+		for(uint32_t j = 0; j < 3072; ++j){
+			*(m_valset_pt + i*3072 + j ) = *(m_Dataset_pt + (NumTrainSet+i)*3072 + j);
+		}
 		*(m_valLabels_pt + i ) = *(m_Labels_pt + NumTrainSet+i);
 	}
 
@@ -117,8 +121,10 @@ void cifar10Dataset::preprocess(uint32_t NumTrainSet, uint32_t NumTestSet, uint3
 
 
 	for(uint32_t i = 0; i < NumTestSet; ++i){
-		*(m_testset_pt + i ) = *(m_Dataset_pt + i);
-		*(m_testLabels_pt + i ) = *(m_Labels_pt + i);
+		for(uint32_t j = 0; j < 3072; ++j){
+			*(m_testset_pt + i*3072 + j) = *(m_Dataset_pt + i*3072 + j);
+		}
+		*(m_testLabels_pt + i) = *(m_Labels_pt + i);
 	}
 
 //	vector<image>::const_iterator first_test = this->m_Dataset.begin();

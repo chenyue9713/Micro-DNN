@@ -52,8 +52,6 @@ void Network::backProp(Matrix& input, Vector& target){
 
 	this->m_loss->evaluate(scores, target);
 
-	const double loss = this->m_loss->get_loss();
-
 	Layer* first_layer = this->m_layers[0];
 
 	Layer* last_layer = this->m_layers[NumLayers - 1];
@@ -101,15 +99,17 @@ void Network::fit(Optimizer& opt, Matrix x, Vector y, uint16_t batch_size, uint1
 	double loss;
 	for(uint16_t i = 0; i < epoch; ++i){
 		int count = 0;
-		for(uint32_t i = 0; i < batch_mask.getRowNum(); ++i){
-			uint16_t bsize = *(batch_mask_pt + i * (batch_mask.getColNum()-1));
+		for(uint32_t j = 0; j < batch_mask.getRowNum(); ++j){
+			uint16_t bsize = *(batch_mask_pt + j * (batch_mask.getColNum()-1));
 			Matrix batch_x(bsize, 3072);
 			double* batch_x_pt = batch_x.Data();
 			Vector batch_y(bsize);
 			double* batch_y_pt = batch_y.Data();
 			for(uint16_t k = 0; k < bsize; ++k){
-				int index = int(*(batch_mask_pt + i * (batch_mask.getColNum()-1) + k+1));
-				*(batch_x_pt + k) = *(x_pt + index);
+				int index = int(*(batch_mask_pt + j * (batch_mask.getColNum()-1) + k+1));
+				for(uint16_t m = 0; m < 3072 ; ++m){
+					*(batch_x_pt + k*3072 + m) = *(x_pt + index*3072 + m);
+				}
 				//batch_x.Data()[k] = x.Data()[index];
 				*(batch_y_pt + k) = *(y_pt + index);
 				//batch_y.Data()[k] = y.Data()[index];
@@ -121,7 +121,7 @@ void Network::fit(Optimizer& opt, Matrix x, Vector y, uint16_t batch_size, uint1
 			count++;
 			loss = m_loss->get_loss();
 			loss_history.push_back(loss);
-			cout << "(batch number " << count << " / " << 245 << ") " << "loss:" << loss << endl;
+			//cout << "(batch number " << count << " / " << 245 << ") " << "loss:" << loss << endl;
 		}
 		cout << "(Epoch " << i << " / " << epoch << ") " << "loss:" << loss << endl;
 	}

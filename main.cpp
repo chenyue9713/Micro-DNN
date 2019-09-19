@@ -567,34 +567,7 @@ int main(){
 
 	net.fit(opt,cifar.getTrainset(), cifar.getTrainLabels(), 200, 9);
 
-//srand(1);
 
-//std::default_random_engine generator;
-//std::uniform_int_distribution<int> distribution(0,25);
-//
-//for(int k = 0; k <2; ++k){
-//
-//for(uint32_t i = 0; i < 5 ; ++i){
-//	for(uint32_t j = 0; j < 5 ; ++j){
-//		cout << distribution(generator) << " ";
-//	}
-//	cout << endl;
-//}
-//cout << endl;
-//}
-//
-//for(uint32_t i = 0; i < 5 ; ++i){
-//	for(uint32_t j = 0; j < 5 ; ++j){
-//		cout << distribution(generator) << " ";
-//	}
-//	cout << endl;
-//}
-
-//	std::default_random_engine generator;
-//	std::uniform_int_distribution<int> distribution(0,5000-1);
-//
-//	shuffle_test(generator, distribution);
-//	shuffle_test(generator, distribution);
 
 
 
